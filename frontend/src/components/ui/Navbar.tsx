@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
     Navbar,
-    MobileNav,
     Typography,
     IconButton,
+    Collapse
 } from "@material-tailwind/react";
 import CustomButton from "./CustomButton";
 import { logout } from "../../api/auth.requests";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 export function StickyNavbar() {
     const [openNav, setOpenNav] = useState(false);
     const navigate = useNavigate()
-    const handleLogout =async () => {
+    const handleLogout = async () => {
         if (await logout()) {
             localStorage.removeItem("token");
             localStorage.removeItem("role");
@@ -54,7 +54,7 @@ export function StickyNavbar() {
     );
 
     return (
-        <Navbar placeholder={undefined} className="sticky top-2 opacity-95 z-10 h-max max-w-[calc(100% - 20px)] rounded-md px-4 py-1 mb-2 lg:px-8 lg:py-2">
+        <Navbar placeholder={undefined} className="sticky top-2 opacity-95 z-10 h-max max-w-[calc(100%-20px)] rounded-t-md rounded-b-none px-4 py-1 mb-2 lg:px-8 lg:py-2">
             <div className="flex items-center justify-between text-blue-gray-900">
                 <Typography
                     placeholder={undefined}
@@ -112,17 +112,18 @@ export function StickyNavbar() {
                     </IconButton>
                 </div>
             </div>
-            <MobileNav open={openNav}>
-                {localStorage.getItem("role") === "employer" && navList}
-                <div className="flex items-center gap-x-1">
-                <CustomButton
+            <Collapse open={openNav}>
+                <div className="flex flex-col gap-2">
+                    {localStorage.getItem("role") === "employer" && navList}
+                    <div className="flex items-center gap-x-1">
+                        <CustomButton
                             containerClassNames="w-full"
                             label="Log out"
                             onClick={handleLogout}
-
                         />
+                    </div>
                 </div>
-            </MobileNav>
+            </Collapse>
         </Navbar>
     );
 }
