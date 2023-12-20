@@ -6,8 +6,21 @@
 * {
     margin: 0;
     padding: 0;
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
 }
 
+
+  
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 0px;
+}
+  
+*::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(156, 0, 156, 0.5);
+}
 body {
     width: 100vw;
     height: 100vh;
