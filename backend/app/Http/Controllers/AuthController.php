@@ -58,7 +58,7 @@ class AuthController extends Controller
             );
         }
 
-        $role = Role::where('role', $request->role)->first();
+        $role = Role::where('role', 'employer')->first();
 
         $user = new User;
         $user->name = $request->name;
