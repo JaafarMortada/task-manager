@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/auth/*" element={<AuthRoutes/>} />
-        <Route path="/task/*" element={<TaskRoutes/>} />
+        <Route path="/tasks/*" element={<TaskRoutes/>} />
       </Routes>
     </BrowserRouter>
   )
