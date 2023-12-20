@@ -29,6 +29,7 @@ export const signup = async (data: signupData) => {
         });
         if (response.message === "User created successfully") {
             localStorage.setItem("token", response.user.token);
+            localStorage.setItem("role", response.user.role);
             const user: authResponse = response.user
             return user;
         } else return response.status
@@ -46,10 +47,26 @@ export const login = async (data: loginData) => {
         })
         if (response.message === 'logged in successfully') {
             localStorage.setItem("token", response.user.token);
+            localStorage.setItem("role", response.user.role);
             const user: authResponse = response.user
             return user
         } else return response.status
     } catch (error) {
         return error
+    }
+}
+
+export const logout = async () => {
+    try {
+        const response = await requestHandler({
+            method: "POST",
+            route: "auth/logout",
+        })
+        if (response.message === "Successfully logged out") {
+            localStorage.removeItem("token");
+            return true
+        } else return false
+    } catch (error) {
+        return false
     }
 }
