@@ -26,3 +26,10 @@ body {
     height: 100vh;
     background: #eeeeee;
 }
+
+.purple__glass {
+    background: rgba(202, 0, 202, 0.21);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.6px);
+    -webkit-backdrop-filter: blur(5.6px);
+  }
