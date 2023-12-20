@@ -2,28 +2,28 @@ import { StickyNavbar } from "../components/ui/Navbar"
 import TaskCard from "../components/cards/TaskCard"
 import CustomSelect from "../components/ui/CustomSelect";
 import { useState } from "react";
-import CustomButton from "../components/ui/CustomButton";
+import AddNewTask from "../components/dialogs/AddNewTask";
 
 const dummyData = [
     {
         id: 1,
         date: '2023-12-25T12:00:00Z',
         title: 'Plan Holiday Celebration',
-        notes: 'Prepare for a joyful holiday celebration with friends and family.',
+        description: 'Prepare for a joyful holiday celebration with friends and family.',
         stage: 100,
     },
     {
         id: 2,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 50,
     },
     {
         id: 3,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 0,
 
     },
@@ -31,7 +31,7 @@ const dummyData = [
         id: 4,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 50,
 
     },
@@ -39,7 +39,7 @@ const dummyData = [
         id: 5,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 50,
 
     },
@@ -47,7 +47,7 @@ const dummyData = [
         id: 6,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 100,
 
     },
@@ -55,7 +55,7 @@ const dummyData = [
         id: 7,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 0,
 
     },
@@ -63,7 +63,7 @@ const dummyData = [
         id: 8,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 50,
 
     },
@@ -71,7 +71,7 @@ const dummyData = [
         id: 9,
         date: '2023-12-30T10:30:00Z',
         title: 'Meeting with Clients',
-        notes: 'Discuss upcoming projects and finalize client requirements.',
+        description: 'Discuss upcoming projects and finalize client requirements.',
         stage: 100,
 
     },
@@ -114,7 +114,7 @@ const TasksPage = () => {
                     value={"all"}
                     classNames=" w-[250px] z-[999]"
                 />
-                <CustomButton label="Add Task" containerClassNames="w-[220px]"/>
+                <AddNewTask handleNewTask={(task) => setTasks([task, ...tasks])} />
             </div>
             <div className="flex flex-col z-[2] gap-2 mt-2 items-center mb-5">
                 {tasks.map((task) => (

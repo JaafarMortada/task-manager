@@ -15,7 +15,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         <Card
         placeholder={undefined}
             color="white"
-            className={` max-w-[calc(100%-20px)]  py-4 z-[1] px-5 rounded-none shadow-sm flex flex-row border-l-[5px] border-${color}-500 `}
+            className={`max-w-[600px] min-w-[600px] py-4 z-[1] px-5 rounded-none shadow-sm flex flex-row border-l-[5px] border-${color}-500 `}
         >
             <CardHeader
             placeholder={undefined}
@@ -25,7 +25,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                 className="mx-0 z-[0] flex gap-4 items-start  min-w-[100px] pb-8 "
             >
                 <div className="flex min-w-max bg-gray-500 flex-col  gap-0.5 rounded-full h-20 w-20 items-center justify-center">
-
                     <div className="flex items-center justify-between">
                         <Typography variant="h5" className={`text-gray-100 text-[14px]`} placeholder={undefined}>
                             {date.format('dddd')} 
@@ -41,14 +40,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
                     <div className={`flex items-center justify-between `}>
                         <Typography variant="h6" className="text-[--gray]" placeholder={undefined}>
-                            {date.format('dddd, MMMM Do, YYYY')}
+                            Due: {date.format('dddd, MMMM Do, YYYY')}
                         </Typography>
 
                     </div>
                     <Typography className=" text-left font-bold text-[21px]" placeholder={undefined}>{task.title}</Typography>
                 </div>
                 <Typography className={` text-justify`} placeholder={undefined}>
-                    {task.notes}
+                    {task.description}
                 </Typography>
             </CardBody>
         </Card>
