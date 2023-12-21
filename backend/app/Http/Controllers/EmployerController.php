@@ -47,4 +47,13 @@ class EmployerController extends Controller
             'message' => 'Employee added successfully'
         ], 200);
     }
+
+    public function getEmployees () {
+        $employer = auth()->user();
+        $employees = $employer->employees()->get();
+        return response()->json([
+            'message' => 'Employees fetched successfully',
+            'employees' => $employees
+        ], 200);
+    }
 }
