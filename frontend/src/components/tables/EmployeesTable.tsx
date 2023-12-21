@@ -1,12 +1,12 @@
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { Card, Spinner, Typography } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { Employee, getEmployees } from "../../api/users.requests";
+import { Employee, getEmployees, deleteEmployee } from "../../api/users.requests";
 import AddNewEmployee from "../dialogs/AddNewEmployee";
 
 const TABLE_HEAD = ["Name", "Email", ""];
 
-type TableState = "loading" | "success" | "error";
+type TableState = "loading" | "success" | "error" | `deleting-${number}` | `deleting-${number}-failed`;
 
 const EmployeesTable = () => {
 
@@ -19,7 +19,7 @@ const EmployeesTable = () => {
             setTableState("success")
         }, 3000);
     }
-    const getEmployeesHandler = async () => {
+    const handleGetEmployees = async () => {
         setTableState("loading")
         try {
             const employeesResponse = await getEmployees()
@@ -43,8 +43,21 @@ const EmployeesTable = () => {
         setEmployees((prevEmployees) => [newEmployee, ...prevEmployees])
     }
 
+    const handleDeleteEmployee = async (id: number) => {
+        setTableState(`deleting-${id}`)
+        const isEmployeeDeleted = await deleteEmployee(id)
+        if (isEmployeeDeleted) {
+            setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee.id !== id))
+        } else {
+            setTableState(`deleting-${id}-failed`)
+            setTimeout(() => {
+                setTableState("success")
+            }, 3000);
+        }
+    }
+
     useEffect(() => {
-        getEmployeesHandler()
+        handleGetEmployees()
     }, [])
 
     return (
@@ -55,7 +68,7 @@ const EmployeesTable = () => {
                 employees.length === 0 ?
                     <div className="my-auto flex flex-col w-full items-center justify-center gap-5">
                         <Typography className="self-center justify-self-center text-purple-500" placeholder={undefined}>No Employees Found</Typography>
-                        <AddNewEmployee buttonLabel="Add your first employee" handleNewEmployee={handleNewEmployee} buttonWidth="max-w-[50px]" />
+                        <AddNewEmployee buttonLabel="Add your first employee" handleNewEmployee={handleNewEmployee} buttonWidth="max-w-[250px]" />
                     </div>
                     :
                     <table className="min-w-[750px] max-w-[750px] table-auto text-left">
@@ -86,7 +99,7 @@ const EmployeesTable = () => {
                         <tbody>
                             {
 
-                                employees.map(({ name, email }, index) => {
+                                employees.map(({ id, name, email }, index) => {
                                     const isLast = index === employees.length - 1;
                                     const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -117,8 +130,14 @@ const EmployeesTable = () => {
                                                     href="#"
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-medium max-w-[250px] min-w-[250px] truncate flex" placeholder={undefined}                                    >
-                                                    <TrashIcon className="text-red-500 justify-self-center w-5 h-5 hover:scale-105" />
+                                                    className="font-medium max-w-[250px] min-w-[250px] truncate flex" placeholder={undefined}>
+                                                    {
+                                                        tableState === `deleting-${id}` ?
+                                                            <Spinner className="justify-self-center w-5 h-5 hover:scale-105" color="red" />
+                                                            :
+                                                            <TrashIcon className="text-red-500 justify-self-center w-5 h-5 hover:scale-105" onClick={() => handleDeleteEmployee(id)} />
+
+                                                    }
                                                 </Typography>
                                             </td>
                                         </tr>

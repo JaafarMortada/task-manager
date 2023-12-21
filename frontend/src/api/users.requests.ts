@@ -46,3 +46,18 @@ export const addEmployee = async (employee: EmployeeData): Promise<Employee | un
         return error;
     }
 }
+
+export const deleteEmployee = async (id: number): Promise<boolean> => {
+    try {
+        const response = await requestHandler({
+            method: "DELETE",
+            route: `employer/delete-employee/${id}`,
+        });
+        if (response.message === "Employee deleted successfully") {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        return false;
+    }
+}
