@@ -10,6 +10,12 @@ export interface Employee {
     updated_at: string;
 }
 
+export interface EmployeeData {
+    name: string;
+    email: string;
+    password: string;
+}
+
 export const getEmployees = async (): Promise<Employee[] | unknown> => {
     try {
         const response = await requestHandler({
@@ -18,6 +24,22 @@ export const getEmployees = async (): Promise<Employee[] | unknown> => {
         });
         if (response.message === "Employees fetched successfully") {
             return response.employees as Employee[];
+        }
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+export const addEmployee = async (employee: EmployeeData): Promise<Employee | unknown> => {
+    try {
+        const response = await requestHandler({
+            method: "POST",
+            route: "employer/add-employee",
+            body: employee,
+        });
+        if (response.message === "Employee added successfully") {
+            return response.employee as Employee;
         }
         return response;
     } catch (error) {
