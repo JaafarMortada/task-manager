@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\TasksController;
 
 Route::group([
     'middleware' => 'api',
@@ -21,4 +22,12 @@ Route::group([
     'prefix' => 'employer'
 ], function () {
     Route::post('/add-employee', [EmployerController::class, 'addEmployee']);  
+    Route::post('/add-task', [TasksController::class, 'addTask']);  
+});
+
+Route::group([
+    'prefix' => 'tasks'
+], function () {
+    Route::get('/get-all', [TasksController::class, 'getTasks']);  
+    Route::post('/edit/{id}', [TasksController::class, 'editTask']);  
 });
