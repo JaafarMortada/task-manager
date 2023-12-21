@@ -13,11 +13,11 @@ class TasksController extends Controller
         $user = Auth::user();
 
         $role = $user->role()->first()->role;
-
+        
         if ($role === 'employee') {
-            $tasks = $user->employer()->first()->tasks()->get();
+            $tasks = $user->employer()->first()->tasks()->orderBy('created_at', 'desc')->get();
         } else {
-            $tasks = $user->tasks()->get();
+            $tasks = $user->tasks()->orderBy('created_at', 'desc')->get();
         }
 
         return response()->json([
