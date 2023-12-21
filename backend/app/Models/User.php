@@ -35,12 +35,17 @@ class User extends Authenticatable implements JWTSubject
     public function employees()
     {
         return $this->belongsToMany(User::class, 'employers_employees', 'employer_id', 'employee_id')
-            ->where('role_id', Role::where('name', 'employee')->first()->id);
+            ->where('role_id', Role::where('role', 'employee')->first()->id);
     }
 
     public function employer()
     {
         return $this->belongsToMany(User::class, 'employers_employees', 'employee_id', 'employer_id')
-            ->where('role_id', Role::where('name', 'employer')->first()->id);
+            ->where('role_id', Role::where('role', 'employer')->first()->id);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'user_id', 'id');
     }
 }
