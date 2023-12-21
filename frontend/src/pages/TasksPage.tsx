@@ -3,7 +3,7 @@ import TaskCard from "../components/cards/TaskCard"
 import CustomSelect from "../components/ui/CustomSelect";
 import { useEffect, useState } from "react";
 import AddNewTask from "../components/dialogs/AddNewTask";
-import { TaskResponse, getTasks } from "../api/tasks.requests";
+import { TaskResponse, getTasks, updateTask } from "../api/tasks.requests";
 import { Spinner } from "@material-tailwind/react";
 
 type filter = "all" | "completed" | "incomplete" | "in-progress"
@@ -41,12 +41,12 @@ const TasksPage = () => {
             if (
                 Array.isArray(tasksResponse) &&
                 tasksResponse.every((item) => typeof item === "object" && item !== null)
-              ) {
+            ) {
                 setTasks(tasksResponse);
                 setFilteredTasks(tasksResponse)
-              } else {
+            } else {
                 setTasks([]);
-              }       
+            }
         } catch (error) {
             setTasksState('error')
         } finally {
@@ -54,11 +54,32 @@ const TasksPage = () => {
         }
     }
 
+    const updateTaskStage = async (taskId: number, newStage: number) => {
+        try {
+            const isTaskUpdated = await updateTask({ stage: newStage }, taskId);
+            if (isTaskUpdated) {
+                setTasks((prevTasks) =>
+                    prevTasks.map((task) =>
+                        task.id === taskId ? { ...task, stage: newStage } : task
+                    )
+                );
+                setFilteredTasks((prevTasks) =>
+                    prevTasks.map((task) =>
+                        task.id === taskId ? { ...task, stage: newStage } : task
+                    )
+                );
+                return isTaskUpdated
+            }
+        } catch (error) {
+            return false
+        }
+    };
+
     useEffect(() => {
-      handleGetTasks()
+        handleGetTasks()
 
     }, [])
-    
+
 
     return (
         <div className="flex flex-col items-center">
@@ -78,7 +99,7 @@ const TasksPage = () => {
                     value={"all"}
                     classNames=" w-[250px] z-[999]"
                 />
-                {localStorage.getItem('role') === 'employer' && <AddNewTask handleNewTask={(task) => {setFilteredTasks([task, ...tasks]); setTasks([task, ...tasks])}} />}
+                {localStorage.getItem('role') === 'employer' && <AddNewTask handleNewTask={(task) => { setFilteredTasks([task, ...tasks]); setTasks([task, ...tasks]) }} />}
             </div>
             <div className="flex flex-col z-[2] gap-2 mt-2 items-center min-h-[calc(100vh-200px)] mb-5">
                 {
@@ -86,11 +107,11 @@ const TasksPage = () => {
                         <Spinner color="purple" className="h-16 w-16 my-auto" /> :
                         tasksState === "error" ?
                             <p className="text-red-500 my-auto">Error while fetching tasks</p> :
-                        filteredTasks.length === 0 ?
-                            <p className="text-purple-500 my-auto">No Tasks To Show</p> :
-                        filteredTasks.map((task) => (
-                            <TaskCard key={task.id} task={task} />
-                        ))}
+                            filteredTasks.length === 0 ?
+                                <p className="text-purple-500 my-auto">No Tasks To Show</p> :
+                                filteredTasks.map((task) => (
+                                    <TaskCard key={task.id} task={task} updateTaskStage={updateTaskStage}/>
+                                ))}
             </div>
 
         </div>

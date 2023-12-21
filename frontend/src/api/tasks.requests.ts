@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { requestHandler } from "./requestHandler";
 
 export interface TaskData {
@@ -16,6 +17,10 @@ export interface TaskResponse {
     created_at: Date;
     updated_at: Date;
     user_id: number;
+}
+
+interface UpdateTaskData {
+    stage: number;
 }
 
 export const getTasks = async ():Promise<TaskResponse[] | number | unknown> => {
@@ -47,5 +52,21 @@ export const addTask =async (data: TaskData): Promise<TaskResponse | number | un
         return response.message;
     } catch (error) {
         return error;
+    }
+}
+
+export const updateTask = async (data: UpdateTaskData, id: number): Promise<boolean> => {
+    try {
+        const response = await requestHandler({
+            method: "POST",
+            route: `tasks/edit/${id}`,
+            body: data,
+        });
+        if (response.message === "Task updated successfully") {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        return false;
     }
 }

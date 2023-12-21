@@ -1,24 +1,26 @@
 // import PropTypes from 'prop-types'
 import { Card, CardHeader, CardBody, Typography } from "@material-tailwind/react";
 import moment from 'moment'
+import { TaskResponse } from "../../api/tasks.requests";
+import EditTaskStage from "../editData/EditTaskStage";
 
 interface TaskCardProps {
-    task: any
+    task: TaskResponse;
+    updateTaskStage: (taskId: number, newStage: number) => Promise<boolean | undefined>
 }
 
-
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, updateTaskStage }) => {
 
     const date = moment(task.due_date);
     const color = task.stage === 100 ? 'green' : (task.stage < 100 && task.stage > 0) ? 'yellow' : 'red'
     return (
         <Card
-        placeholder={undefined}
+            placeholder={undefined}
             color="white"
-            className={`max-w-[600px] min-w-[600px] py-4 z-[1] px-5 rounded-none shadow-sm flex flex-row border-l-[5px] border-${color}-500 `}
+            className={`max-w-[600px] min-w-[600px] pt-4 z-[1] px-5 rounded-none shadow-sm flex flex-row border-l-[5px] border-${color}-500 `}
         >
             <CardHeader
-            placeholder={undefined}
+                placeholder={undefined}
                 color="transparent"
                 floated={false}
                 shadow={false}
@@ -27,7 +29,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                 <div className="flex min-w-max bg-gray-500 flex-col  gap-0.5 rounded-full h-20 w-20 items-center justify-center">
                     <div className="flex items-center justify-between">
                         <Typography variant="h5" className={`text-gray-100 text-[14px]`} placeholder={undefined}>
-                            {date.format('dddd')} 
+                            {date.format('dddd')}
                         </Typography>
 
                     </div>
@@ -35,7 +37,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                 </div>
 
             </CardHeader>
-            <CardBody placeholder={undefined} className="z-[0] mb-6 p-0 flex flex-col gap-3">
+            <CardBody placeholder={undefined} className=" z-[0] mb-6 p-0 flex flex-col gap-3">
                 <div className={`flex min-w-max flex-col gap-0.5`}>
 
                     <div className={`flex items-center justify-between `}>
@@ -49,10 +51,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                 <Typography className={` text-justify`} placeholder={undefined}>
                     {task.description}
                 </Typography>
+                <div className="flex items-center gap-5 min-h-10">
+                    <EditTaskStage task={task} updateTaskStage={updateTaskStage} />
+                </div>
             </CardBody>
         </Card>
 
-    ) 
+    )
 }
 
 export default TaskCard
