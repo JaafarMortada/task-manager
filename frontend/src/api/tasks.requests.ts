@@ -4,7 +4,7 @@ export interface TaskData {
     title: string;
     description: string;
     stage: number;
-    due_date: Date;
+    due_date: Date | string;
 }
 
 export interface TaskResponse {
@@ -34,6 +34,7 @@ export const getTasks = async ():Promise<TaskResponse[] | number | unknown> => {
 }
 
 export const addTask =async (data: TaskData): Promise<TaskResponse | number | unknown> => {
+
     try {
         const response = await requestHandler({
             method: "POST",
@@ -43,7 +44,7 @@ export const addTask =async (data: TaskData): Promise<TaskResponse | number | un
         if (response.message === "successfully added task") {
             return response.task;
         } 
-        return response.status;
+        return response.message;
     } catch (error) {
         return error;
     }

@@ -2,48 +2,60 @@ import { Dialog, DialogBody, DialogFooter, DialogHeader, Typography } from "@mat
 import { CustomButton, CustomInput } from "../ui"
 import { useState } from "react"
 import CustomTextArea from "../ui/CustomTextArea"
+import { TaskData, TaskResponse, addTask } from "../../api/tasks.requests";
+import moment from "moment";
+import { AxiosError } from "axios";
 
 interface AddNewTaskProps {
-    handleNewTask: (newTask: any) => void;
+    handleNewTask: (newTask: TaskResponse) => void;
 }
 
 const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(!open)
-    const [data, setData] = useState({
+    const [data, setData] = useState<TaskData>({
         title: '',
-        date: '',
+        due_date: new Date(),
+        stage: 0,
         description: '',
     })
-    const [error, setError] = useState(false)
+    const [formState, setFormState] = useState('waiting-for-input')
+    const [errorMessage, setErrorMessage] = useState<string>('')
+    const handleError = (error: string) => {
+        setFormState("error")
+        setErrorMessage(error)
+        setTimeout(() => {
+            setFormState("waiting-for-input")
 
-    const [adding, setAdding] = useState(false)
-
-    // const handleError = () => {
-    //     setAdding(false)
-    //     setError(true)
-    //     setTimeout(() => {
-    //         setError(false);
-    //     }, 3000)
-    // }
+        }, 3000);
+    }
 
     const handleAddTask = async () => {
-        // const res: TaskItem = await addTask(data)
-        // if (res.title) {
-            // setAdding(false)
-            handleNewTask(data);
-            setOpen(false)
-        // } else {
-            // handleError()
-        // }
+        setFormState('loading')
+        try {
+            const newTask = await addTask(data)
+            if (newTask !== null && typeof newTask === "object" && !(newTask.hasOwnProperty('message'))) {
+                handleNewTask(newTask as TaskResponse);
+                setOpen(false)
+            } else if (newTask instanceof AxiosError) {
+                if (newTask instanceof AxiosError && newTask.response && newTask.response.data && newTask.response.data.error) {
+                    handleError(newTask.response.data.error.toString());
+                } else {
+                    handleError('Something went wrong');
+                }
+
+            }
+        } catch (error) {
+            handleError('Something went wrong');
+        }
     }
 
     return (
         <>
             <CustomButton label="Add New Task" classes='' onClick={handleOpen} containerClassNames="w-[220px]" />
             <Dialog size={"md"} open={open} handler={handleOpen}
-                className="" 
+                className=""
                 placeholder={undefined}
             >
                 <DialogHeader
@@ -66,7 +78,8 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
                     <div className="w-[400px]">
                         <CustomInput
                             label="Due Data"
-                            onChange={(e) => setData({ ...data, date: e.target.value })} type="date"
+                            onChange={(e) => setData({ ...data, due_date: moment(e.target.value, 'YYYY-MM-DD').format('YYYY-MM-DD') })}
+                            type="date"
                         />
                     </div>
                     <div className="w-[400px]">
@@ -75,13 +88,23 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
                             onChange={(e) => setData({ ...data, description: e.target.value })}
                         />
                     </div>
+                    <Typography
+                        variant="small"
+                        className="flex w-[400px] min-h-[42px] gap-1 text-red-500 font-normal"
+                        placeholder={undefined}
+                    >
+                        {
+                            errorMessage
+                        }
+                    </Typography>
                 </DialogBody>
                 <DialogFooter className="flex justify-center" placeholder={undefined}>
                     <CustomButton
                         label="Add Task"
-                        classes={`w-[400px] ${error && 'bg-red-500'}`}
-                        loading={adding}
-                    onClick={handleAddTask}
+                        classes={`w-[400px] ${formState === "error" && 'bg-red-500'}`}
+                        loading={formState === 'loading'}
+                        onClick={handleAddTask}
+                        disabled={data.title === '' || data.due_date === '' || data.description === ''}
                     />
                 </DialogFooter>
             </Dialog>

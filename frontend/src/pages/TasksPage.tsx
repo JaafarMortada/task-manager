@@ -78,7 +78,7 @@ const TasksPage = () => {
                     value={"all"}
                     classNames=" w-[250px] z-[999]"
                 />
-                {localStorage.getItem('role') === 'employer' && <AddNewTask handleNewTask={(task) => setTasks([task, ...tasks])} />}
+                {localStorage.getItem('role') === 'employer' && <AddNewTask handleNewTask={(task) => {setFilteredTasks([task, ...tasks]); setTasks([task, ...tasks])}} />}
             </div>
             <div className="flex flex-col z-[2] gap-2 mt-2 items-center min-h-[calc(100vh-200px)] mb-5">
                 {
