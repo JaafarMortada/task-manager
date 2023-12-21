@@ -2,7 +2,7 @@ import { TrashIcon } from "@heroicons/react/16/solid";
 import { Card, Spinner, Typography } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { Employee, getEmployees } from "../../api/users.requests";
-import { CustomButton } from "../ui";
+import AddNewEmployee from "../dialogs/AddNewEmployee";
 
 const TABLE_HEAD = ["Name", "Email", ""];
 
@@ -39,6 +39,10 @@ const EmployeesTable = () => {
         }
     }
 
+    const handleNewEmployee = (newEmployee: Employee) => {
+        setEmployees((prevEmployees) => [newEmployee, ...prevEmployees])
+    }
+
     useEffect(() => {
         getEmployeesHandler()
     }, [])
@@ -51,10 +55,10 @@ const EmployeesTable = () => {
                 employees.length === 0 ?
                     <div className="my-auto flex flex-col w-full items-center justify-center gap-5">
                         <Typography className="self-center justify-self-center text-purple-500" placeholder={undefined}>No Employees Found</Typography>
-                        <CustomButton label="Add your first employee" containerClassNames="max-w-[250px]"/>
+                        <AddNewEmployee buttonLabel="Add your first employee" handleNewEmployee={handleNewEmployee} buttonWidth="max-w-[50px]" />
                     </div>
                     :
-                    <table className="w-full min-w-max table-auto text-left">
+                    <table className="min-w-[750px] max-w-[750px] table-auto text-left">
                         <thead>
                             <tr>
                                 {TABLE_HEAD.map((head) => (
@@ -67,8 +71,14 @@ const EmployeesTable = () => {
                                             color="blue-gray"
                                             className="font-normal leading-none opacity-70" placeholder={undefined}
                                         >
-                                            {head}
+                                            {
+                                                head === '' ?
+                                                    <AddNewEmployee buttonLabel="Add employee" buttonWidth="max-w-[150px]" handleNewEmployee={handleNewEmployee} />
+                                                    :
+                                                    head
+                                            }
                                         </Typography>
+
                                     </th>
                                 ))}
                             </tr>
@@ -86,7 +96,7 @@ const EmployeesTable = () => {
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-normal" placeholder={undefined}
+                                                    className="font-normal max-w-[250px] min-w-[250px] truncate" placeholder={undefined}
                                                 >
                                                     {name}
                                                 </Typography>
@@ -95,7 +105,7 @@ const EmployeesTable = () => {
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-normal" placeholder={undefined}
+                                                    className="font-normal max-w-[250px] min-w-[250px] truncate" placeholder={undefined}
                                                 >
                                                     {email}
                                                 </Typography>
@@ -107,8 +117,8 @@ const EmployeesTable = () => {
                                                     href="#"
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-medium" placeholder={undefined}                                    >
-                                                    <TrashIcon className="text-red-500 w-5 h-5 hover:scale-105" />
+                                                    className="font-medium max-w-[250px] min-w-[250px] truncate flex" placeholder={undefined}                                    >
+                                                    <TrashIcon className="text-red-500 justify-self-center w-5 h-5 hover:scale-105" />
                                                 </Typography>
                                             </td>
                                         </tr>
