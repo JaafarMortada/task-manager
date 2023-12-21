@@ -44,7 +44,8 @@ class EmployerController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Employee added successfully'
+            'message' => 'Employee added successfully',
+            'employee' => $user
         ], 200);
     }
 
@@ -54,6 +55,32 @@ class EmployerController extends Controller
         return response()->json([
             'message' => 'Employees fetched successfully',
             'employees' => $employees
+        ], 200);
+    }
+
+    public function deleteEmployee ($id) {
+        $employer = auth()->user();
+        $employee = User::find($id);
+        if (!$employee) {
+            return response()->json([
+                'message' => 'Employee not found'
+            ], 404);
+        }
+        try {
+            if ($employer->id && $employee->role_id === Role::where('role', 'employer')->first()->id && $employer->id !== $employee->employer()->id) {
+                return response()->json([
+                    'message' => 'You are not authorized to delete this employee'
+                ], 401);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'You are not authorized to delete this employee'
+            ], 401);
+        }
+        
+        $employee->delete();
+        return response()->json([
+            'message' => 'Employee deleted successfully'
         ], 200);
     }
 }

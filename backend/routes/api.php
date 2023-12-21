@@ -24,6 +24,7 @@ Route::group([
     Route::post('/add-employee', [EmployerController::class, 'addEmployee']);  
     Route::post('/add-task', [TasksController::class, 'addTask']);  
     Route::get('/get-employees', [EmployerController::class, 'getEmployees']);  
+    Route::delete('/delete-employee/{id}', [EmployerController::class, 'deleteEmployee']);
 });
 
 Route::group([
