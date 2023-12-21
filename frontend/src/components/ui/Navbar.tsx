@@ -69,7 +69,7 @@ export function StickyNavbar() {
                     <div className="mr-4 hidden lg:block">{localStorage.getItem("role") === "employer" && navList}</div>
                     <div className="flex items-center gap-x-1">
                         <CustomButton
-                            containerClassNames="w-[150px] hidden lg:inline-block"
+                            containerClassNames="max-w-[150px] hidden lg:inline-block"
                             label="Log out"
                             onClick={handleLogout}
                         />
