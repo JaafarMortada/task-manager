@@ -9,7 +9,7 @@ interface TaskCardProps {
 
 const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
-    const date = moment(task.date);
+    const date = moment(task.due_date);
     const color = task.stage === 100 ? 'green' : (task.stage < 100 && task.stage > 0) ? 'yellow' : 'red'
     return (
         <Card

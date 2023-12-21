@@ -1,102 +1,64 @@
 import { StickyNavbar } from "../components/ui/Navbar"
 import TaskCard from "../components/cards/TaskCard"
 import CustomSelect from "../components/ui/CustomSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddNewTask from "../components/dialogs/AddNewTask";
+import { TaskResponse, getTasks } from "../api/tasks.requests";
+import { Spinner } from "@material-tailwind/react";
 
-const dummyData = [
-    {
-        id: 1,
-        date: '2023-12-25T12:00:00Z',
-        title: 'Plan Holiday Celebration',
-        description: 'Prepare for a joyful holiday celebration with friends and family.',
-        stage: 100,
-    },
-    {
-        id: 2,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 50,
-    },
-    {
-        id: 3,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 0,
-
-    },
-    {
-        id: 4,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 50,
-
-    },
-    {
-        id: 5,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 50,
-
-    },
-    {
-        id: 6,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 100,
-
-    },
-    {
-        id: 7,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 0,
-
-    },
-    {
-        id: 8,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 50,
-
-    },
-    {
-        id: 9,
-        date: '2023-12-30T10:30:00Z',
-        title: 'Meeting with Clients',
-        description: 'Discuss upcoming projects and finalize client requirements.',
-        stage: 100,
-
-    },
-];
+type filter = "all" | "completed" | "incomplete" | "in-progress"
 
 const TasksPage = () => {
 
-    const [tasks, setTasks] = useState(dummyData)
+    const [tasks, setTasks] = useState<TaskResponse[]>([])
+    const [filteredTasks, setFilteredTasks] = useState<TaskResponse[]>(tasks)
+    const [tasksState, setTasksState] = useState('loading')
 
-    const taskFilteringHandler = (filter: "all" | "completed" | "incomplete") => {
+    const taskFilteringHandler = (filter: filter) => {
         switch (filter) {
             case "all":
-                setTasks(dummyData)
+                setFilteredTasks(tasks)
                 break;
             case "completed":
-                setTasks(dummyData.filter(task => task.stage === 100))
+                setFilteredTasks(tasks.filter(task => task.stage === 100))
+                break;
+            case "in-progress":
+                setFilteredTasks(tasks.filter(task => task.stage > 0 && task.stage < 100))
                 break;
             case "incomplete":
-                setTasks(dummyData.filter(task => task.stage > 0 && task.stage < 100))
+                setFilteredTasks(tasks.filter(task => task.stage === 0))
                 break;
             default:
-                setTasks(dummyData)
+                setFilteredTasks(tasks)
                 break;
         }
     }
+
+    const handleGetTasks = async () => {
+        setTasksState('loading')
+        try {
+            const tasksResponse = await getTasks()
+            if (
+                Array.isArray(tasksResponse) &&
+                tasksResponse.every((item) => typeof item === "object" && item !== null)
+              ) {
+                setTasks(tasksResponse);
+                setFilteredTasks(tasksResponse)
+              } else {
+                setTasks([]);
+              }       
+        } catch (error) {
+            setTasksState('error')
+        } finally {
+            setTasksState('success')
+        }
+    }
+
+    useEffect(() => {
+      handleGetTasks()
+
+    }, [])
+    
 
     return (
         <div className="flex flex-col items-center">
@@ -107,19 +69,28 @@ const TasksPage = () => {
                     options={[
                         { value: "all", label: "All" },
                         { value: "completed", label: "Completed" },
+                        { value: "in-progress", label: "In Progress" },
                         { value: "incomplete", label: "Incomplete" },
                     ]}
                     onChange={(e) => {
-                        taskFilteringHandler(e as any)}}
+                        taskFilteringHandler(e as filter)
+                    }}
                     value={"all"}
                     classNames=" w-[250px] z-[999]"
                 />
-                <AddNewTask handleNewTask={(task) => setTasks([task, ...tasks])} />
+                {localStorage.getItem('role') === 'employer' && <AddNewTask handleNewTask={(task) => setTasks([task, ...tasks])} />}
             </div>
-            <div className="flex flex-col z-[2] gap-2 mt-2 items-center mb-5">
-                {tasks.map((task) => (
-                    <TaskCard key={task.id} task={task} />
-                ))}
+            <div className="flex flex-col z-[2] gap-2 mt-2 items-center min-h-[calc(100vh-200px)] mb-5">
+                {
+                    tasksState === "loading" ?
+                        <Spinner color="purple" className="h-16 w-16 my-auto" /> :
+                        tasksState === "error" ?
+                            <p className="text-red-500 my-auto">Error while fetching tasks</p> :
+                        filteredTasks.length === 0 ?
+                            <p className="text-purple-500 my-auto">No Tasks To Show</p> :
+                        filteredTasks.map((task) => (
+                            <TaskCard key={task.id} task={task} />
+                        ))}
             </div>
 
         </div>
