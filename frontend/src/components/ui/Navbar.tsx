@@ -34,6 +34,7 @@ export function StickyNavbar() {
                 variant="small"
                 color="blue-gray"
                 className="p-1 font-normal"
+                onClick={() => navigate("/employer/my-employees")}
             >
                 <span className="flex items-center cursor-pointer">
                     Employees
@@ -45,6 +46,7 @@ export function StickyNavbar() {
                 variant="small"
                 color="blue-gray"
                 className="p-1 font-normal"
+                onClick={() => navigate("/tasks")}
             >
                 <span className="flex items-center cursor-pointer">
                     Tasks

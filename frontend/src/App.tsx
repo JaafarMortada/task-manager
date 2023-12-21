@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthRoutes, TaskRoutes } from "./routes";
+import { AuthRoutes, EmployersRoutes, TaskRoutes } from "./routes";
 import Home from './pages/Home';
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/auth/*" element={<AuthRoutes/>} />
         <Route path="/tasks/*" element={<TaskRoutes/>} />
+        <Route path="/employer/*" element={<EmployersRoutes/>} />
       </Routes>
     </BrowserRouter>
   )
