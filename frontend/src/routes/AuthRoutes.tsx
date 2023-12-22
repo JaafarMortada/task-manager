@@ -1,12 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
-import AuthPage from '../pages/AuthPage';
-
+import { useLocation } from 'react-router-dom';
+import { LocationProvider } from '../framer/LocationProvider';
+import { SigninPage, SignupPage } from '../pages';
 const AuthRoutes = () => {
-    return ( 
-        <Routes>
-            <Route path="/" element={<AuthPage />} />
-        </Routes>
-     );
+    const location = useLocation();
+
+    return (
+        <LocationProvider>
+            <Routes location={location} key={location.key}>
+                <Route path="/signin" element={<SigninPage />} />
+                <Route path="/signup" element={<SignupPage />} />
+            </Routes>
+        </LocationProvider>
+
+    );
 }
- 
+
 export default AuthRoutes;

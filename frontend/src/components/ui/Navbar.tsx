@@ -16,7 +16,7 @@ export function StickyNavbar() {
         if (await logout()) {
             localStorage.removeItem("token");
             localStorage.removeItem("role");
-            navigate("/auth")
+            navigate("/auth/signin")
         }
     }
     useEffect(() => {

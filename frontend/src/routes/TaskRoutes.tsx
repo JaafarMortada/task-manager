@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import TasksPage from '../pages/TasksPage';
+import { TasksPage } from '../pages';
 
 const TaskRoutes = () => {
     return (
