@@ -79,18 +79,19 @@ const EmployeesTable = () => {
                                         key={head}
                                         className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                                     >
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal leading-none opacity-70" placeholder={undefined}
-                                        >
-                                            {
-                                                head === '' ?
-                                                    <AddNewEmployee buttonLabel="Add employee" buttonWidth="max-w-[150px]" handleNewEmployee={handleNewEmployee} />
-                                                    :
+                                        {head === '' ?
+                                            <AddNewEmployee buttonLabel="Add employee" buttonWidth="max-w-[150px]" handleNewEmployee={handleNewEmployee} />
+                                            :
+
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal leading-none opacity-70" placeholder={undefined}
+                                            >
+                                                {
                                                     head
-                                            }
-                                        </Typography>
+                                                }
+                                            </Typography>}
 
                                     </th>
                                 ))}
