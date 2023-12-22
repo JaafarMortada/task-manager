@@ -33,3 +33,14 @@ body {
     backdrop-filter: blur(5.6px);
     -webkit-backdrop-filter: blur(5.6px);
   }
+
+.purple__gradient {
+    background: linear-gradient(45deg, #AD00FF 18.78%, #ffbc11 60.92%, #AD00FF 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    text-transform: capitalize;
+}

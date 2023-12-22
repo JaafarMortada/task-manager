@@ -14,7 +14,7 @@ const SignupPage = () => {
             initial="initial"
             animate="final"
             className="flex flex-col h-screen items-center justify-center gap-3">
-            <Typography className="text-4xl font-semibold text-purple-500" placeholder={undefined}>Welcome to Task Manager</Typography>
+            <Typography className="text-4xl font-semibold text-purple-500 cursor-pointer" placeholder={undefined} onClick={()=>navigate('/', { state: { fromSignup: true } })}>Welcome to Task Manager</Typography>
             <SignupFrom />
             <div className="flex max-h-fit flex-col items-center justify-center gap-1">
                 <span className="text-gray-500">Don't have an account?</span>
