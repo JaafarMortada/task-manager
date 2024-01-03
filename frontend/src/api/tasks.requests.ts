@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { requestHandler } from "./requestHandler";
 
 export interface TaskData {
