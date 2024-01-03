@@ -8,6 +8,14 @@ export interface TaskData {
     due_date: Date | string;
 }
 
+export interface assignedEmployee {
+    id: number;
+    name: string;
+    email: string;
+    created_at: Date;
+    updated_at: Date;
+}
+
 export interface TaskResponse {
     id: number;
     title: string;
@@ -17,6 +25,7 @@ export interface TaskResponse {
     created_at: Date;
     updated_at: Date;
     user_id: number;
+    assigned_employee: assignedEmployee;
 }
 
 interface UpdateTaskData {

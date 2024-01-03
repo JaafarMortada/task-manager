@@ -53,9 +53,18 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, updateTaskStage }) => {
                 </Typography>
 
                 {
-                    localStorage.getItem('role') === 'employee' &&
+                    localStorage.getItem('role') === 'employee' ?
                     <div className="flex items-center gap-5 min-h-10">
                         <EditTaskStage task={task} updateTaskStage={updateTaskStage} />
+                    </div>
+                    :
+                    <div className="flex flex-col gap-5 min-h-10">
+                        <Typography className={` text-justify`} placeholder={undefined}>
+                            {task.stage === 100 ? 'Completed' : 'Pending'}
+                        </Typography>
+                        <Typography className={` text-justify`} placeholder={undefined}>
+                            <span className="font-bold">Assigned To: </span> {task.assigned_employee.name}
+                        </Typography>
                     </div>
                 }
             </CardBody>
