@@ -93,7 +93,7 @@ class TasksController extends Controller
             );
         }
 
-        if(Auth::user()->role_id == Role::where('role', 'employer')->first()) {
+        if(Auth::user()->role_id == Role::where('role', 'employer')->first()->id) {
             return response()->json([
                 'message' => 'Unauthorized',
             ], 401);
