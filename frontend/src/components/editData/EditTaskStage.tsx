@@ -33,7 +33,7 @@ const EditTaskStage: React.FC<EditTaskStageProps> = ({ task, updateTaskStage }) 
 
                     />
                     :
-                    <Progress value={task.stage} label="done" className="min-w-48 max-w-48" placeholder={undefined} color={task.stage === 100 ? 'green' : (task.stage < 100 && task.stage > 0 ? "yellow" : "red")} />
+                    <Progress value={task.stage} label=" " className="min-w-48 max-w-48 " placeholder={undefined} color={task.stage === 100 ? 'green' : (task.stage < 100 && task.stage > 0 ? "yellow" : "red")} />
             }
             {
                 editing ?

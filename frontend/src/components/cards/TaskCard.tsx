@@ -60,7 +60,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, updateTaskStage }) => {
                     :
                     <div className="flex flex-col gap-5 min-h-10">
                         <Typography className={` text-justify`} placeholder={undefined}>
-                            {task.stage === 100 ? 'Completed' : 'Pending'}
+                            <span className="font-bold">Status: </span>{task.stage === 100 ? 'Completed' : 'Pending'}
                         </Typography>
                         <Typography className={` text-justify`} placeholder={undefined}>
                             <span className="font-bold">Assigned To: </span> {task.assigned_employee.name}

@@ -5,6 +5,7 @@ export interface TaskData {
     title: string;
     description: string;
     stage: number;
+    employee_id: number;
     due_date: Date | string;
 }
 

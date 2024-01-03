@@ -1,10 +1,12 @@
 import { Dialog, DialogBody, DialogFooter, DialogHeader, Typography } from "@material-tailwind/react"
 import { CustomButton, CustomInput } from "../ui"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CustomTextArea from "../ui/CustomTextArea"
 import { TaskData, TaskResponse, addTask } from "../../api/tasks.requests";
 import moment from "moment";
 import { AxiosError } from "axios";
+import Select from 'react-select'
+import { Employee, getEmployees } from "../../api/users.requests";
 
 interface AddNewTaskProps {
     handleNewTask: (newTask: TaskResponse) => void;
@@ -13,13 +15,45 @@ interface AddNewTaskProps {
 const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
 
     const [open, setOpen] = useState(false);
+
+    const [employees, setEmployees] = useState<Employee[]>([])
+    const [options, setOptions] = useState<{ value: number, label: string }[]>([])
+
+    const [employeesState, setEmployeesState] = useState<'loading' | 'success' | 'error'>('success')
+
+    const handleGetEmployees = async () => {
+        setEmployeesState("loading")
+        try {
+            const employeesResponse = await getEmployees()
+            if (
+                Array.isArray(employeesResponse) &&
+                employeesResponse.every((item) => typeof item === "object" && item !== null)
+            ) {
+                setEmployees(employeesResponse)
+                setOptions(employeesResponse.map((employee) => ({ value: employee.id, label: employee.name })))
+            } else {
+                setEmployees([])
+            }
+        } catch (error) {
+
+        } finally {
+            setEmployeesState('success')
+        }
+    }
+    
+    useEffect(() => {
+        handleGetEmployees()
+    }, [])
+
     const handleOpen = () => setOpen(!open)
     const [data, setData] = useState<TaskData>({
         title: '',
         due_date: new Date(),
         stage: 0,
+        employee_id: 0,
         description: '',
     })
+
     const [formState, setFormState] = useState('waiting-for-input')
     const [errorMessage, setErrorMessage] = useState<string>('')
     const handleError = (error: string) => {
@@ -88,6 +122,13 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
                             onChange={(e) => setData({ ...data, description: e.target.value })}
                         />
                     </div>
+                    <Select
+                        options={options}
+                        className="w-[400px]"
+                        isDisabled={employeesState !== 'success'}
+                        value={options.find((option) => option.value === data.employee_id)}
+                        onChange={(option) => setData({ ...data, employee_id: option?.value || 0 })}
+                    />
                     <Typography
                         variant="small"
                         className="flex w-[400px] min-h-[42px] gap-1 text-red-500 font-normal"
@@ -103,8 +144,8 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
                         label="Add Task"
                         classes={`w-[400px] ${formState === "error" && 'bg-red-500'}`}
                         loading={formState === 'loading'}
-                        onClick={handleAddTask}
-                        disabled={data.title === '' || data.due_date === '' || data.description === ''}
+                        onClick={(handleAddTask)}
+                        disabled={data.title === '' || data.due_date === '' || data.description === '' || data.employee_id === 0}
                     />
                 </DialogFooter>
             </Dialog>
