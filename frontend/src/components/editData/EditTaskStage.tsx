@@ -39,9 +39,10 @@ const EditTaskStage: React.FC<EditTaskStageProps> = ({ task, updateTaskStage }) 
                 editing ?
                     <>
                         <CustomButton
-                            label="confirm" containerClassNames="w-[100px]"
+                            label="confirm" containerClassNames="max-w-[100px]"
                             classes={`text-[12px] font-thin p-2 ${updatingState === 'error' ? 'bg-red-500' : 'bg-green-500'}`}
                             loading={updatingState === 'updating'}
+                            
                             onClick={async () => {
                                 setUpdatingState('updating')
                                 const updated = await updateTaskStage(task.id, stage);
@@ -54,12 +55,11 @@ const EditTaskStage: React.FC<EditTaskStageProps> = ({ task, updateTaskStage }) 
                             }
                             }
                         />
-                        <CustomButton label="cancel" containerClassNames="w-[100px]" classes="text-[12px] bg-red-500 font-thin p-2" onClick={() => setEditing(false)} />
+                        <CustomButton label="cancel" containerClassNames="max-w-[100px]" classes="text-[12px] bg-red-500 font-thin p-2" onClick={() => setEditing(false)} />
                     </>
 
                     :
-                    <CustomButton label="edit" containerClassNames="w-[100px]" classes="text-[12px] font-thin p-2" onClick={() => setEditing(true)} />
-
+                    <CustomButton label="edit" containerClassNames="max-w-[100px]" classes="text-[12px] font-thin p-2" onClick={() => setEditing(true)} />
             }
         </>
     )

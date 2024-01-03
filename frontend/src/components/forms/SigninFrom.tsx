@@ -66,7 +66,7 @@ const SigninFrom = () => {
             />
 
             <CustomButton
-                label={formState === "error" ? "An Error Occurred " : "SIGN UP NOW"}
+                label={formState === "error" ? "An Error Occurred " : "SIGN IN"}
                 classes={formState === "error" ? "bg-red-500 " : ""}
                 loading={(formState === 'loading')}
                 disabled={signinData.email === "" || signinData.password === ""}

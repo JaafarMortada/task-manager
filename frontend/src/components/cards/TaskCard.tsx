@@ -51,9 +51,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, updateTaskStage }) => {
                 <Typography className={` text-justify`} placeholder={undefined}>
                     {task.description}
                 </Typography>
-                <div className="flex items-center gap-5 min-h-10">
-                    <EditTaskStage task={task} updateTaskStage={updateTaskStage} />
-                </div>
+
+                {
+                    localStorage.getItem('role') === 'employee' &&
+                    <div className="flex items-center gap-5 min-h-10">
+                        <EditTaskStage task={task} updateTaskStage={updateTaskStage} />
+                    </div>
+                }
             </CardBody>
         </Card>
 
