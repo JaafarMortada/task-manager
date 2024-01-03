@@ -6,7 +6,7 @@ import { TaskData, TaskResponse, addTask } from "../../api/tasks.requests";
 import moment from "moment";
 import { AxiosError } from "axios";
 import Select from 'react-select'
-import { Employee, getEmployees } from "../../api/users.requests";
+import { getEmployees } from "../../api/users.requests";
 
 interface AddNewTaskProps {
     handleNewTask: (newTask: TaskResponse) => void;
@@ -16,7 +16,6 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
 
     const [open, setOpen] = useState(false);
 
-    const [employees, setEmployees] = useState<Employee[]>([])
     const [options, setOptions] = useState<{ value: number, label: string }[]>([])
 
     const [employeesState, setEmployeesState] = useState<'loading' | 'success' | 'error'>('success')
@@ -29,10 +28,9 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ handleNewTask }) => {
                 Array.isArray(employeesResponse) &&
                 employeesResponse.every((item) => typeof item === "object" && item !== null)
             ) {
-                setEmployees(employeesResponse)
                 setOptions(employeesResponse.map((employee) => ({ value: employee.id, label: employee.name })))
             } else {
-                setEmployees([])
+                setOptions([])
             }
         } catch (error) {
 
